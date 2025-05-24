@@ -1,12 +1,13 @@
+# app.py
 import os
 import streamlit as st
-import chromadb
+from chromadb import PersistentClient
 from llm import ask_local_llm, rewrite_prompt, summarize_text
 from ingest import ingest_single_file
 from PyPDF2 import PdfReader
 import docx
 from datetime import datetime
-
+from streamlit_mic_recorder import mic_recorder
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 os.environ["STREAMLIT_WATCHED_MODULES"] = ""
@@ -15,12 +16,7 @@ DB_DIR = "db"
 DATA_DIR = "data"
 COLLECTION_NAME = "memory"
 
-if os.environ.get("IS_STREAMLIT_CLOUD", "false").lower() == "true":
-    client = chromadb.Client()
-else:
-    from chromadb import PersistentClient
-    client = PersistentClient(path=DB_DIR)
-
+client = PersistentClient(path=DB_DIR)
 collection = client.get_or_create_collection(name=COLLECTION_NAME)
 
 @st.cache_data
@@ -95,7 +91,7 @@ with tab1:
         chunks = search_memory(rewritten)
 
         # Chat history context
-        previous_turns = st.session_state.chat_history[-2:]
+        previous_turns = st.session_state.chat_history[-2:]  # last 2
         history_context = "\n\n".join(
             [f"Q: {turn['question']}\nA: {turn['answer']}" for turn in previous_turns]
         )
