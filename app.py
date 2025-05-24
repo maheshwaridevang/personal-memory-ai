@@ -156,4 +156,4 @@ with tab2:
             🕒 *Added:* {date_added}  
             🧠 *Summary:* {summary}  
             ---
-            ")
+            """)
