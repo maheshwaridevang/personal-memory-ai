@@ -1,13 +1,12 @@
-# app.py
 import os
 import streamlit as st
-from chromadb.config import Settings
+import chromadb
 from llm import ask_local_llm, rewrite_prompt, summarize_text
 from ingest import ingest_single_file
 from PyPDF2 import PdfReader
 import docx
 from datetime import datetime
-import chromadb
+
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 os.environ["STREAMLIT_WATCHED_MODULES"] = ""
@@ -16,7 +15,6 @@ DB_DIR = "db"
 DATA_DIR = "data"
 COLLECTION_NAME = "memory"
 
-# Use in-memory Chroma client for Streamlit Cloud
 if os.environ.get("IS_STREAMLIT_CLOUD", "false").lower() == "true":
     client = chromadb.Client()
 else:
