@@ -1,23 +1,15 @@
-# ingest.py
 import os
 import docx
 from PyPDF2 import PdfReader
+from chromadb import PersistentClient
 from utils.chunking import chunk_text
 from utils.embedding import embed_text
-import chromadb
-from chromadb.config import Settings
 
 DATA_DIR = "data"
 DB_DIR = "db"
 COLLECTION_NAME = "memory"
 
-# Use in-memory Chroma client on Streamlit Cloud
-if os.environ.get("IS_STREAMLIT_CLOUD", "false").lower() == "true":
-    client = chromadb.Client()
-else:
-    from chromadb import PersistentClient
-    client = PersistentClient(path=DB_DIR)
-
+client = PersistentClient(path=DB_DIR)
 collection = client.get_or_create_collection(name=COLLECTION_NAME)
 
 def ingest_single_file(filename, text):
