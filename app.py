@@ -1,4 +1,3 @@
-# app.py
 import os
 import streamlit as st
 from chromadb import PersistentClient
@@ -31,11 +30,11 @@ def search_memory(query_text, top_k=3):
     return results["documents"][0]
 
 st.set_page_config(page_title="Personal Memory AI", layout="wide")
-st.title("🧠 Personal Memory AI")
-tab1, tab2 = st.tabs(["💬 Ask Memory", "📄 File Intelligence"])
+st.title(" Personal Memory AI")
+tab1, tab2 = st.tabs([" Ask Memory", " File Intelligence"])
 
 with tab1:
-    st.markdown("### 📁 Upload a New Document")
+    st.markdown("###  Upload a New Document")
     uploaded_file = st.file_uploader("Upload .txt, .pdf, or .docx", type=["txt", "pdf", "docx"])
 
     if uploaded_file:
@@ -60,14 +59,14 @@ with tab1:
                 text = ""
 
             ingest_single_file(filename, text)
-            st.success(f"✅ `{filename}` added to memory.")
+            st.success(f" `{filename}` added to memory.")
             st.rerun()
 
-    st.markdown("### 🗂️ Delete Specific Files")
+    st.markdown("###  Delete Specific Files")
     files = os.listdir(DATA_DIR)
     if files:
         selected_files = st.multiselect("Select files to delete:", files)
-        if selected_files and st.button("🗑️ Delete Selected Files"):
+        if selected_files and st.button(" Delete Selected Files"):
             all_ids = collection.get()["ids"]
             for filename in selected_files:
                 path = os.path.join(DATA_DIR, filename)
@@ -81,10 +80,10 @@ with tab1:
     else:
         st.info("No files currently stored.")
 
-    st.markdown("### 💬 Ask Your Memory")
+    st.markdown("###  Ask Your Memory")
     query = st.text_input("Ask something...", placeholder="e.g. What did I do at Genus Power?")
     if query:
-        st.markdown("✏️ Rewriting query for better retrieval...")
+        st.markdown(" Rewriting query for better retrieval...")
         rewritten = rewrite_prompt(query)
         st.markdown(f"**Rewritten:** `{rewritten}`")
 
@@ -97,10 +96,10 @@ with tab1:
         )
         full_context = history_context + "\n\n" + "\n\n".join(chunks)
 
-        with st.spinner("🤖 Thinking..."):
+        with st.spinner(" Thinking..."):
             answer = ask_local_llm(full_context, rewritten)
 
-        st.markdown("### 🤖 Answer")
+        st.markdown("###  Answer")
         st.success(answer)
 
         st.session_state.chat_history.append({
@@ -109,14 +108,14 @@ with tab1:
             "answer": answer
         })
 
-        with st.expander("🧠 View Chat History"):
+        with st.expander(" View Chat History"):
             for turn in st.session_state.chat_history:
                 st.markdown(f"**You:** {turn['question']}")
                 st.markdown(f"**AI:** {turn['answer']}")
                 st.markdown("---")
 
 with tab2:
-    st.markdown("### 📄 File Intelligence Summary")
+    st.markdown("###  File Intelligence Summary")
 
     files = os.listdir(DATA_DIR)
     if not files:
@@ -146,8 +145,8 @@ with tab2:
             date_added = datetime.fromtimestamp(last_modified).strftime("%Y-%m-%d %H:%M")
 
             st.markdown(f"""
-            **📄 {filename}**  
-            🕒 *Added:* {date_added}  
-            🧠 *Summary:* {summary}  
+            ** {filename}**  
+             *Added:* {date_added}  
+             *Summary:* {summary}  
             ---
             """)
