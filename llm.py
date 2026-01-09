@@ -18,7 +18,7 @@ Question: {question} [/INST]"""
         response = llama(prompt, max_tokens=max_tokens, temperature=0.7)
         return response["choices"][0]["text"].strip()
     except Exception as e:
-        return f"⚠️ Error during LLM response: {str(e)}"
+        return f" Error during LLM response: {str(e)}"
 
 def rewrite_prompt(question):
     prompt = f"""[INST] Rewrite the following question to make it clearer and more specific:
